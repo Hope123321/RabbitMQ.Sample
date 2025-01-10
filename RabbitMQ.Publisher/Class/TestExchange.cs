@@ -10,7 +10,7 @@ using System.Text;
 
 namespace RabbitMQ.Producer.Class
 {
-    internal class TestExchangeByDirect 
+    internal class TestExchange 
     {
         private readonly IRabbitMQPersistentConnection _persistentConnection;
         string _queueName = string.Empty;
@@ -18,7 +18,7 @@ namespace RabbitMQ.Producer.Class
         string _routeKey = string.Empty;
         int _retryCount;
 
-        public TestExchangeByDirect(IRabbitMQPersistentConnection persistentConnection, string exchangeName, string queueName, int retryCount = 5)
+        public TestExchange(IRabbitMQPersistentConnection persistentConnection, string exchangeName, string queueName, int retryCount = 5)
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
             _exchangeName = exchangeName;
@@ -44,11 +44,11 @@ namespace RabbitMQ.Producer.Class
             using (var channel = await _persistentConnection.CreateChannelAsync())
             {
                 //建立Queue
-                await channel.QueueDeclareAsync(_queueName, false, false, false, null);
+                //await channel.QueueDeclareAsync(_queueName, false, false, false, null);
                 //建立Exchange
                 await channel.ExchangeDeclareAsync(exchange: _exchangeName,ExchangeType.Fanout);
                 //把Queue跟Exchange Bind一起
-                await channel.QueueBindAsync(_queueName, _exchangeName, _routeKey);
+                //await channel.QueueBindAsync(_queueName, _exchangeName, _routeKey);
 
                 //var message = JsonConvert.SerializeObject(@event);
                 var body = Encoding.UTF8.GetBytes(message);
